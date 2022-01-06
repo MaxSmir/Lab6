@@ -135,7 +135,7 @@ namespace WindowsFormsApp1
         private int y;
         private int a;
         private bool Colored;
-        Pen pen;
+        private Pen pen;
         public sqare(int x, int y, int a)
         {
             this.x = x;
@@ -163,6 +163,64 @@ namespace WindowsFormsApp1
             return Colored;
         }
 
+        public override bool isClicked(MouseEventArgs e)
+        {
+            if (e.X >= x - a && e.Y >= y - a && e.X <= x + a && e.Y <= y + a)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public override void ColoredFalse()
+        {
+            Colored = false;
+        }
+        public override void ColoredTrue()
+        {
+            Colored = true;
+        }
+    }
+
+    class triangle : figure
+    {
+        private int x;
+        private int y;
+        private int a;
+        private Point[] points;
+        private bool Colored;
+        private Pen pen;
+        public triangle(int x, int y, int a)
+        {
+            this.x = x;
+            this.y = y;
+            this.a = a;
+            points = new Point[3];
+            points[0].X = x; points[0].Y = y - a;
+            points[1].X = x - a; points[1].Y = y + a;
+            points[2].X = x + a; points[2].Y = y + a;
+            Colored = true;
+        }
+
+        override public void Draw(Panel panel1, Graphics g)
+        {
+            if (Colored == true)
+            {
+                pen = new Pen(Color.Red);
+            }
+            else
+            {
+                pen = new Pen(Color.Black);
+            }
+            g.DrawPolygon(pen, points);
+        }
+
+        public override bool IsChecked()
+        {
+            return Colored;
+        }
         public override bool isClicked(MouseEventArgs e)
         {
             if (e.X >= x - a && e.Y >= y - a && e.X <= x + a && e.Y <= y + a)

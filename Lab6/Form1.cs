@@ -28,11 +28,15 @@ namespace WindowsFormsApp1
                 Storage.AllNotChecked();
                 if (figure == 1)
                 {
-                    Storage.AddObject(new Circle(e.X, e.Y, 20));
+                    Storage.AddObject(new Circle(e.X, e.Y, 40));
                 }
                 if (figure == 2)
                 {
-                    Storage.AddObject(new sqare(e.X, e.Y, 15));
+                    Storage.AddObject(new sqare(e.X, e.Y, 30));
+                }
+                if (figure == 3)
+                {
+                    Storage.AddObject(new triangle(e.X, e.Y, 40));
                 }
             }
             else
@@ -96,7 +100,7 @@ namespace WindowsFormsApp1
 
         private void triangle_Click(object sender, EventArgs e)
         {
-            figure = 2;
+            figure = 3;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
