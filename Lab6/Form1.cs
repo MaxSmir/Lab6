@@ -76,7 +76,6 @@ namespace WindowsFormsApp1
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = panel1.CreateGraphics();
-            Storage.chooseColor(col);
             Storage.Draww(panel1, g);
         }
     }
