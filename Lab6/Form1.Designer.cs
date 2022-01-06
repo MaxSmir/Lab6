@@ -84,6 +84,7 @@ namespace WindowsFormsApp1
             this.triangle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.triangle.TabIndex = 8;
             this.triangle.TabStop = false;
+            this.triangle.Click += new System.EventHandler(this.triangle_Click);
             // 
             // square
             // 
@@ -95,6 +96,7 @@ namespace WindowsFormsApp1
             this.square.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.square.TabIndex = 7;
             this.square.TabStop = false;
+            this.square.Click += new System.EventHandler(this.square_Click);
             // 
             // circle
             // 
@@ -107,6 +109,7 @@ namespace WindowsFormsApp1
             this.circle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.circle.TabIndex = 4;
             this.circle.TabStop = false;
+            this.circle.Click += new System.EventHandler(this.circle_Click);
             // 
             // red
             // 

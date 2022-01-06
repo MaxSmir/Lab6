@@ -63,6 +63,22 @@ namespace WindowsFormsApp1
             {
                 pen = new Pen(Color.Black);
             }
+            //if (col == 0) 
+            //{
+            //    pen = new Pen(Color.Black);
+            //}
+            //if (col == 1)
+            //{
+            //    pen = new Pen(Color.Red);
+            //}
+            //if (col == 2)
+            //{
+            //    pen = new Pen(Color.Blue);
+            //}
+            //if (col == 3)
+            //{
+            //    pen = new Pen(Color.DarkGreen);
+            //}
             g.DrawEllipse(pen, rec);
         }
 
@@ -110,6 +126,61 @@ namespace WindowsFormsApp1
             {
                 pen.Color = Color.Green;
             }
+        }
+    }
+
+    class sqare : figure
+    {
+        private int x;
+        private int y;
+        private int a;
+        private bool Colored;
+        Pen pen;
+        public sqare(int x, int y, int a)
+        {
+            this.x = x;
+            this.y = y;
+            this.a = a;
+            Colored = true;
+        }
+
+        override public void Draw(Panel panel1, Graphics g)
+        {
+            Rectangle rec = new Rectangle(x - a, y - a, a * 2, a * 2);
+            if (Colored == true)
+            {
+                pen = new Pen(Color.Red);
+            }
+            else
+            {
+                pen = new Pen(Color.Black);
+            }
+            g.DrawRectangle(pen, rec);
+        }
+
+        public override bool IsChecked()
+        {
+            return Colored;
+        }
+
+        public override bool isClicked(MouseEventArgs e)
+        {
+            if (e.X >= x - a && e.Y >= y - a && e.X <= x + a && e.Y <= y + a)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public override void ColoredFalse()
+        {
+            Colored = false;
+        }
+        public override void ColoredTrue()
+        {
+            Colored = true;
         }
     }
 

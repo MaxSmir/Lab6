@@ -16,6 +16,7 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
         }
+        int figure = 1;
         int col = 0;
         MyStorage Storage = new MyStorage();
 
@@ -25,7 +26,14 @@ namespace WindowsFormsApp1
             if (Storage.IsClicked(e) == false)
             {
                 Storage.AllNotChecked();
-                Storage.AddObject(new Circle(e.X, e.Y, 20));
+                if (figure == 1)
+                {
+                    Storage.AddObject(new Circle(e.X, e.Y, 20));
+                }
+                if (figure == 2)
+                {
+                    Storage.AddObject(new sqare(e.X, e.Y, 15));
+                }
             }
             else
             {
@@ -52,7 +60,7 @@ namespace WindowsFormsApp1
                 Refresh();
             }
 
-        }     
+        }
         private void black_Click(object sender, EventArgs e)
         {
             col = 0;
@@ -71,6 +79,24 @@ namespace WindowsFormsApp1
         private void green_Click(object sender, EventArgs e)
         {
             col = 3;
+        }
+
+
+
+
+        private void circle_Click(object sender, EventArgs e)
+        {
+            figure = 1;
+        }
+
+        private void square_Click(object sender, EventArgs e)
+        {
+            figure = 2;
+        }
+
+        private void triangle_Click(object sender, EventArgs e)
+        {
+            figure = 2;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
