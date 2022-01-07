@@ -22,7 +22,6 @@ namespace WindowsFormsApp1
         }
         virtual public void ColoredTrue()
         {
-
         }
         virtual public void ColoredFalse()
         {
@@ -33,8 +32,14 @@ namespace WindowsFormsApp1
         }
         virtual public void chooseColor(int col)
         {
-
         }
+        virtual public void Move(KeyEventArgs e)
+        {
+        }
+        virtual public void Size(KeyEventArgs e)
+        {
+        }
+
     }
 
     class Circle : figure
@@ -44,24 +49,26 @@ namespace WindowsFormsApp1
         private int radius;
         private bool Colored;
         private Pen pen;
+        private SolidBrush brush;
         Rectangle rec;
         public Circle(int x, int y, int radius)
         {
             this.x = x;
             this.y = y;
             this.radius = radius;
-            Colored = true;
+            brush = new SolidBrush(Color.White);
+            pen = new Pen(Color.White);
         }
         override public void Draw(Panel panel1, Graphics g)
         {
             rec = new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
             if (Colored == true)
             {
-                pen = new Pen(Color.Red);
+                pen.Color = Color.Red;
             }
             else
             {
-                pen = new Pen(Color.Black);
+                pen.Color = Color.Black;
             }
             //if (col == 0) 
             //{
@@ -77,8 +84,9 @@ namespace WindowsFormsApp1
             //}
             //if (col == 3)
             //{
-            //    pen = new Pen(Color.DarkGreen);
+            //    pen = new Pen(Color.DarkGreen); //mojno tok kak hz
             //}
+            g.FillEllipse(brush, rec);
             g.DrawEllipse(pen, rec);
         }
 
@@ -108,23 +116,56 @@ namespace WindowsFormsApp1
             Colored = false;
         }
 
+        public override void Size(KeyEventArgs e)
+        {
+            if (e.KeyValue == 107)
+            {
+                radius = radius + 10;
+            }
+            if (e.KeyValue == 109)
+            {
+                radius = radius - 10;
+            }
+
+        }
+        override public void Move(KeyEventArgs e)
+        {
+            if (e.KeyValue == 37)
+            {
+                x = x - 5;
+            }
+            if (e.KeyValue == 39)
+            {
+                x = x + 5;
+            }
+            if (e.KeyValue == 38)
+            {
+                y = y - 5;
+            }
+            if (e.KeyValue == 40)
+            {
+                y = y + 5;
+            }
+        }
+
         public override void chooseColor(int col)
         {
-            if (col == 0)
-            {
-                pen.Color = Color.Black;
-            }
+
             if (col == 1)
             {
-                pen.Color = Color.Red;
+                brush.Color = Color.Black;
             }
             if (col == 2)
             {
-                pen.Color = Color.Blue;
+                brush.Color = Color.Red;
             }
             if (col == 3)
             {
-                pen.Color = Color.Green;
+                brush.Color = Color.Blue;
+            }
+            if (col == 4)
+            {
+                brush.Color = Color.Green;
             }
         }
     }
@@ -135,13 +176,14 @@ namespace WindowsFormsApp1
         private int y;
         private int a;
         private bool Colored;
+        private SolidBrush brush;
         private Pen pen;
         public sqare(int x, int y, int a)
         {
             this.x = x;
             this.y = y;
             this.a = a;
-            Colored = true;
+            brush = new SolidBrush(Color.White);
         }
 
         override public void Draw(Panel panel1, Graphics g)
@@ -155,9 +197,60 @@ namespace WindowsFormsApp1
             {
                 pen = new Pen(Color.Black);
             }
+            g.FillRectangle(brush, rec);
             g.DrawRectangle(pen, rec);
         }
+        public override void Size(KeyEventArgs e)
+        {
 
+            if (e.KeyValue == 107)
+            {
+                a = a + 10;
+            }
+            if (e.KeyValue == 109)
+            {
+                a = a - 10;
+            }
+        }
+        override public void Move(KeyEventArgs e)
+        {
+            if (e.KeyValue == 37)
+            {
+                x = x - 5;
+            }
+            if (e.KeyValue == 39)
+            {
+                x = x + 5;
+            }
+            if (e.KeyValue == 38)
+            {
+                y = y - 5;
+            }
+            if (e.KeyValue == 40)
+            {
+                y = y + 5;
+            }
+        }
+        public override void chooseColor(int col)
+        {
+
+            if (col == 1)
+            {
+                brush.Color = Color.Black;
+            }
+            if (col == 2)
+            {
+                brush.Color = Color.Red;
+            }
+            if (col == 3)
+            {
+                brush.Color = Color.Blue;
+            }
+            if (col == 4)
+            {
+                brush.Color = Color.Green;
+            }
+        }
         public override bool IsChecked()
         {
             return Colored;
@@ -192,16 +285,17 @@ namespace WindowsFormsApp1
         private Point[] points;
         private bool Colored;
         private Pen pen;
+        private SolidBrush brush;
         public triangle(int x, int y, int a)
         {
             this.x = x;
             this.y = y;
             this.a = a;
+            brush = new SolidBrush(Color.White);
             points = new Point[3];
             points[0].X = x; points[0].Y = y - a;
             points[1].X = x - a; points[1].Y = y + a;
             points[2].X = x + a; points[2].Y = y + a;
-            Colored = true;
         }
 
         override public void Draw(Panel panel1, Graphics g)
@@ -214,7 +308,70 @@ namespace WindowsFormsApp1
             {
                 pen = new Pen(Color.Black);
             }
+            g.FillPolygon(brush, points);
             g.DrawPolygon(pen, points);
+        }
+        public override void Size(KeyEventArgs e)
+        {
+            if (e.KeyValue == 107)
+            {
+                points[0].X = points[0].X; points[0].Y = points[0].Y - 10;
+                points[1].X = points[1].X - 10; points[1].Y = points[1].Y + 10;
+                points[2].X = points[2].X + 10; points[2].Y = points[2].Y + 10;
+            }
+            if (e.KeyValue == 109)
+            {
+                points[0].X = points[0].X; points[0].Y = points[0].Y + 10;
+                points[1].X = points[1].X + 10; points[1].Y = points[1].Y - 10;
+                points[2].X = points[2].X - 10; points[2].Y = points[2].Y - 10;
+            }
+        }
+        override public void Move(KeyEventArgs e)
+        {
+            if (e.KeyValue == 37)
+            {
+                points[0].X = points[0].X - 5; points[0].Y = points[0].Y;
+                points[1].X = points[1].X - 5; points[1].Y = points[1].Y;
+                points[2].X = points[2].X - 5; points[2].Y = points[2].Y;
+            }
+            if (e.KeyValue == 39)
+            {
+                points[0].X = points[0].X + 5; points[0].Y = points[0].Y;
+                points[1].X = points[1].X + 5; points[1].Y = points[1].Y;
+                points[2].X = points[2].X + 5; points[2].Y = points[2].Y;
+            }
+            if (e.KeyValue == 38)
+            {
+                points[0].X = points[0].X; points[0].Y = points[0].Y - 5;
+                points[1].X = points[1].X; points[1].Y = points[1].Y - 5;
+                points[2].X = points[2].X; points[2].Y = points[2].Y - 5;
+            }
+            if (e.KeyValue == 40)
+            {
+                points[0].X = points[0].X; points[0].Y = points[0].Y + 5;
+                points[1].X = points[1].X; points[1].Y = points[1].Y + 5;
+                points[2].X = points[2].X; points[2].Y = points[2].Y + 5;
+            }
+        }
+        public override void chooseColor(int col)
+        {
+
+            if (col == 1)
+            {
+                brush.Color = Color.Black;
+            }
+            if (col == 2)
+            {
+                brush.Color = Color.Red;
+            }
+            if (col == 3)
+            {
+                brush.Color = Color.Blue;
+            }
+            if (col == 4)
+            {
+                brush.Color = Color.Green;
+            }
         }
 
         public override bool IsChecked()
@@ -286,6 +443,36 @@ namespace WindowsFormsApp1
             storage[size] = Obj;
             size++;
         }
+        public void Size(KeyEventArgs e)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (storage[i].IsChecked() == true)
+                {
+                    storage[i].Size(e);
+                }
+            }
+        }
+        public void Move(KeyEventArgs e)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (storage[i].IsChecked() == true)
+                {
+                    storage[i].Move(e);
+                }
+            }
+        }
+        public void chooseColor(int col)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (storage[i].IsChecked() == true)
+                {
+                    storage[i].chooseColor(col);
+                }
+            }
+        }
         public void RemoveObject(int i)
         {
             figure[] storage2 = new figure[size - 1];
@@ -322,13 +509,7 @@ namespace WindowsFormsApp1
             }
         }
 
-        public void chooseColor(int col)
-        {
-            for (int i = 0; i < size; i++)
-            {
-                storage[i].chooseColor(col);
-            }
-        }
+
         public void Highlighting(MouseEventArgs e)
         {
             for (int i = 0; i < size; i++)

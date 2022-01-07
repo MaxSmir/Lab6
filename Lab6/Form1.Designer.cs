@@ -38,6 +38,9 @@ namespace WindowsFormsApp1
             this.green = new System.Windows.Forms.PictureBox();
             this.blue = new System.Windows.Forms.PictureBox();
             this.black = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.triangle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.square)).BeginInit();
@@ -62,6 +65,7 @@ namespace WindowsFormsApp1
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.triangle);
             this.panel2.Controls.Add(this.square);
             this.panel2.Controls.Add(this.circle);
@@ -78,7 +82,7 @@ namespace WindowsFormsApp1
             // 
             this.triangle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.triangle.Image = global::Lab6.Properties.Resources.треугольник;
-            this.triangle.Location = new System.Drawing.Point(228, 162);
+            this.triangle.Location = new System.Drawing.Point(229, 218);
             this.triangle.Name = "triangle";
             this.triangle.Size = new System.Drawing.Size(85, 85);
             this.triangle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -90,7 +94,7 @@ namespace WindowsFormsApp1
             // 
             this.square.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.square.Image = global::Lab6.Properties.Resources.квадрат;
-            this.square.Location = new System.Drawing.Point(119, 162);
+            this.square.Location = new System.Drawing.Point(120, 218);
             this.square.Name = "square";
             this.square.Size = new System.Drawing.Size(85, 85);
             this.square.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -103,7 +107,7 @@ namespace WindowsFormsApp1
             this.circle.BackColor = System.Drawing.Color.White;
             this.circle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.circle.Image = global::Lab6.Properties.Resources.круг;
-            this.circle.Location = new System.Drawing.Point(12, 162);
+            this.circle.Location = new System.Drawing.Point(13, 218);
             this.circle.Name = "circle";
             this.circle.Size = new System.Drawing.Size(85, 85);
             this.circle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -155,17 +159,50 @@ namespace WindowsFormsApp1
             this.black.TabStop = false;
             this.black.Click += new System.EventHandler(this.black_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(11, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(302, 24);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Выберите цвет и нажмите F5";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(739, 385);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(427, 20);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "Для перемещения фигур используйте стрелочки";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label3.Location = new System.Drawing.Point(739, 417);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(396, 20);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Для изменения размера используйте \"+\" и \"-\"";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1160, 674);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.triangle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.square)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.circle)).EndInit();
@@ -174,6 +211,7 @@ namespace WindowsFormsApp1
             ((System.ComponentModel.ISupportInitialize)(this.blue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.black)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -188,6 +226,9 @@ namespace WindowsFormsApp1
         private System.Windows.Forms.PictureBox triangle;
         private System.Windows.Forms.PictureBox circle;
         private System.Windows.Forms.PictureBox square;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }
 
