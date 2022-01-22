@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
     class figure
     {
+        protected Color color = Color.White;
+        public bool Sticky = false;
         virtual public void Draw(Panel panel1, Graphics g)
         {
         }
@@ -39,29 +42,52 @@ namespace WindowsFormsApp1
         virtual public void Size(KeyEventArgs e)
         {
         }
+        virtual public bool isSticky()
+        {
+            return true;
+        }
+        virtual public void Save(StreamWriter file)
+        {
+        }
+        virtual public void Load(StreamReader file)
+        {
+        }
+        virtual public string Name()
+        {
+            return "Shape";
+        }
+        virtual public int getCount()
+        {
+            return 1;
+        }
+        virtual public figure getObject(int i)
+        {
+            figure a = new figure();
+            return a;
+        }
+
+        public int x, y, r;
+
 
     }
 
     class Circle : figure
     {
-        private int x;
-        private int y;
-        private int radius;
         private bool Colored;
         private Pen pen;
         private SolidBrush brush;
         Rectangle rec;
-        public Circle(int x, int y, int radius)
+        public Circle(int x, int y, int r)
         {
             this.x = x;
             this.y = y;
-            this.radius = radius;
+            this.r = r;
             brush = new SolidBrush(Color.White);
             pen = new Pen(Color.White);
         }
         override public void Draw(Panel panel1, Graphics g)
         {
-            rec = new Rectangle(x - radius, y - radius, radius * 2, radius * 2);
+            rec = new Rectangle(x - r, y - r, r * 2, r * 2);
             if (Colored == true)
             {
                 pen.Color = Color.Red;
@@ -70,22 +96,6 @@ namespace WindowsFormsApp1
             {
                 pen.Color = Color.Black;
             }
-            //if (col == 0) 
-            //{
-            //    pen = new Pen(Color.Black);
-            //}
-            //if (col == 1)
-            //{
-            //    pen = new Pen(Color.Red);
-            //}
-            //if (col == 2)
-            //{
-            //    pen = new Pen(Color.Blue);
-            //}
-            //if (col == 3)
-            //{
-            //    pen = new Pen(Color.DarkGreen); //mojno tok kak hz
-            //}
             g.FillEllipse(brush, rec);
             g.DrawEllipse(pen, rec);
         }
@@ -94,10 +104,13 @@ namespace WindowsFormsApp1
         {
             return Colored;
         }
-
+        override public bool isSticky()
+        {
+            return Sticky;
+        }
         override public bool isClicked(MouseEventArgs e)
         {
-            if ((e.X - x) * (e.X - x) + (e.Y - y) * (e.Y - y) <= radius * radius)
+            if ((e.X - x) * (e.X - x) + (e.Y - y) * (e.Y - y) <= r * r)
             {
                 return true;
             }
@@ -120,29 +133,28 @@ namespace WindowsFormsApp1
         {
             if (e.KeyValue == 107)
             {
-                radius = radius + 10;
+                r = r + 10;
             }
             if (e.KeyValue == 109)
             {
-                radius = radius - 10;
+                r = r - 10;
             }
-
         }
         override public void Move(KeyEventArgs e)
         {
-            if (e.KeyValue == 37)
+            if (e.KeyCode == Keys.A)//(e.KeyValue == 37)
             {
                 x = x - 5;
             }
-            if (e.KeyValue == 39)
+            if (e.KeyCode == Keys.D)//(e.KeyValue == 39)
             {
                 x = x + 5;
             }
-            if (e.KeyValue == 38)
+            if (e.KeyCode == Keys.W)//(e.KeyValue == 38)
             {
                 y = y - 5;
             }
-            if (e.KeyValue == 40)
+            if (e.KeyCode == Keys.S)//(e.KeyValue == 40)
             {
                 y = y + 5;
             }
@@ -150,45 +162,63 @@ namespace WindowsFormsApp1
 
         public override void chooseColor(int col)
         {
-
             if (col == 1)
             {
                 brush.Color = Color.Black;
+                color = Color.Black;
             }
             if (col == 2)
             {
                 brush.Color = Color.Red;
+                color = Color.Red;
             }
             if (col == 3)
             {
                 brush.Color = Color.Blue;
+                color = Color.Blue;
             }
             if (col == 4)
             {
                 brush.Color = Color.Green;
+                color = Color.Green;
             }
+        }
+        public override void Save(StreamWriter file)
+        {
+            file.WriteLine("C");
+            file.WriteLine(x);
+            file.WriteLine(y);
+            file.WriteLine(r);
+            file.WriteLine(color.ToKnownColor());
+        }
+        public override void Load(StreamReader file)
+        {
+            x = Convert.ToInt32(file.ReadLine());
+            y = Convert.ToInt32(file.ReadLine());
+            r = Convert.ToInt32(file.ReadLine());
+            color = Color.FromName(file.ReadLine());
+        }
+        public override string Name()
+        {
+            return "Circle";
         }
     }
 
     class sqare : figure
     {
-        private int x;
-        private int y;
-        private int a;
         private bool Colored;
         private SolidBrush brush;
         private Pen pen;
-        public sqare(int x, int y, int a)
+        public sqare(int x, int y, int r)
         {
             this.x = x;
             this.y = y;
-            this.a = a;
+            this.r = r;
             brush = new SolidBrush(Color.White);
         }
-
         override public void Draw(Panel panel1, Graphics g)
         {
-            Rectangle rec = new Rectangle(x - a, y - a, a * 2, a * 2);
+            Rectangle rec = new Rectangle(x - r, y - r, r * 2, r * 2);
             if (Colored == true)
             {
                 pen = new Pen(Color.Red);
@@ -200,33 +230,36 @@ namespace WindowsFormsApp1
             g.FillRectangle(brush, rec);
             g.DrawRectangle(pen, rec);
         }
+        override public bool isSticky()
+        {
+            return Sticky;
+        }
         public override void Size(KeyEventArgs e)
         {
-
             if (e.KeyValue == 107)
             {
-                a = a + 10;
+                r = r + 10;
             }
             if (e.KeyValue == 109)
             {
-                a = a - 10;
+                r = r - 10;
             }
         }
         override public void Move(KeyEventArgs e)
         {
-            if (e.KeyValue == 37)
+            if (e.KeyCode == Keys.A)
             {
                 x = x - 5;
             }
-            if (e.KeyValue == 39)
+            if (e.KeyCode == Keys.D)
             {
                 x = x + 5;
             }
-            if (e.KeyValue == 38)
+            if (e.KeyCode == Keys.W)
             {
                 y = y - 5;
             }
-            if (e.KeyValue == 40)
+            if (e.KeyCode == Keys.S)
             {
                 y = y + 5;
             }
@@ -237,19 +270,43 @@ namespace WindowsFormsApp1
             if (col == 1)
             {
                 brush.Color = Color.Black;
+                color = Color.Black;
             }
             if (col == 2)
             {
                 brush.Color = Color.Red;
+                color = Color.Red;
             }
             if (col == 3)
             {
                 brush.Color = Color.Blue;
+                color = Color.Blue;
             }
             if (col == 4)
             {
                 brush.Color = Color.Green;
+                color = Color.Green;
             }
+        }
+        public override void Save(StreamWriter file)
+        {
+            file.WriteLine("S");
+            file.WriteLine(x);
+            file.WriteLine(y);
+            file.WriteLine(r);
+            file.WriteLine(color.ToKnownColor());
+        }
+
+        public override void Load(StreamReader file)
+        {
+            x = Convert.ToInt32(file.ReadLine());
+            y = Convert.ToInt32(file.ReadLine());
+            r = Convert.ToInt32(file.ReadLine());
+            color = Color.FromName(file.ReadLine());
+        }
+        public override string Name()
+        {
+            return "sqare";
         }
         public override bool IsChecked()
         {
@@ -258,7 +315,7 @@ namespace WindowsFormsApp1
 
         public override bool isClicked(MouseEventArgs e)
         {
-            if (e.X >= x - a && e.Y >= y - a && e.X <= x + a && e.Y <= y + a)
+            if (e.X >= x - r && e.Y >= y - r && e.X <= x + r && e.Y <= y + r)
             {
                 return true;
             }
@@ -355,7 +412,6 @@ namespace WindowsFormsApp1
         }
         public override void chooseColor(int col)
         {
-
             if (col == 1)
             {
                 brush.Color = Color.Black;
@@ -373,7 +429,6 @@ namespace WindowsFormsApp1
                 brush.Color = Color.Green;
             }
         }
-
         public override bool IsChecked()
         {
             return Colored;
@@ -398,11 +453,34 @@ namespace WindowsFormsApp1
             Colored = true;
         }
     }
+    class Factory
+    {
+        public figure createShape(char name)
+        {
+            figure obj = null;
+            switch (name)
+            {
+                case 'C':
+                    obj = new Circle(0, 0, 0);
+                    break;
+                case 'S':
+                    obj = new sqare(0, 0, 0);
+                    break;
+                case 'G':
+                    obj = new CGroup(0);
+                    break;
+                default:
+                    break;
+            }
+            return obj;
+        }
+    }
 
     class MyStorage
     {
         private int size;
-        figure[] storage;
+        public figure[] storage;
+        public System.EventHandler observers;
 
         public MyStorage()
         {
@@ -416,6 +494,10 @@ namespace WindowsFormsApp1
         public void SetObject(int size, figure Obj)
         {
             storage[size] = Obj;
+        }
+        public int getCount()
+        {
+            return size;
         }
         public bool IsClicked(MouseEventArgs e)
         {
@@ -459,6 +541,19 @@ namespace WindowsFormsApp1
             {
                 if (storage[i].IsChecked() == true)
                 {
+                    if (storage[i].isSticky() == true)
+                    {
+                        for (int j = 0; j < size; j++)
+                        {
+                            if (i != j)
+                            {
+                                if (Math.Sqrt(Math.Pow(storage[i].x - storage[j].x, 2) + Math.Pow(storage[i].y - storage[j].y, 2)) <= (storage[i].r + storage[j].r))
+                                {
+                                    storage[j].Move(e);
+                                }
+                            }
+                        }
+                    }
                     storage[i].Move(e);
                 }
             }
@@ -473,6 +568,105 @@ namespace WindowsFormsApp1
                 }
             }
         }
+
+        public figure getObject(int i)
+        {
+            return storage[i];
+        }
+
+        public void createGroup()
+        {
+            int count = 0;
+            for (int i = 0; i < size; i++)
+            {
+                if (storage[i].IsChecked() == true)
+                    count++;
+            }
+            if (count >= 2)
+            {
+                CGroup group = new CGroup(count);
+                for (int i = size - 1; i >= 0; i--)
+                {
+                    if (storage[i].IsChecked() == true)
+                    {
+                        group.addShape(storage[i]);
+                        RemoveObject(i);
+                    }
+                }
+                AddObject(group);
+            }
+
+        }
+
+
+
+        public void deleteGroup()
+        {
+            for (int i = size - 1; i >= 0; i--)
+            {
+                if (storage[i] is CGroup && storage[i].IsChecked())
+                {
+                    CGroup group = (CGroup)storage[i];
+                    for (int j = group.getCount() - 1; j >= 0; j--)
+                    {
+                        AddObject(group._shapes[j]);
+                    }
+                    RemoveObject(i);
+                }
+            }
+        }
+
+        public void saveAll()
+        {
+            string way = @"save.txt";
+            StreamWriter file = new StreamWriter(way, false);
+            file.WriteLine(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                storage[i].Save(file);
+            }
+            file.Close();
+        }
+
+        public void loadAll()
+        {
+            string way = @"save.txt";
+            Factory factory = new Factory();
+            StreamReader file = new StreamReader(way);
+            int count = Convert.ToInt32(file.ReadLine());
+            char name;
+            for (int i = 0; i < count; i++)
+            {
+                name = Convert.ToChar(file.ReadLine());
+                AddObject(factory.createShape(name));
+                if (storage[i] != null)
+                {
+                    storage[i].Load(file);
+                }
+            }
+            file.Close();
+        }
+
+        public void MakeSticky()
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (storage[i].IsChecked() == true)
+                {
+                    storage[i].Sticky = true;
+                }
+            }
+        }
+
+        public void MakeCheckedbyIndex(int i)
+        {
+            storage[i].ColoredTrue();
+        }
+        public void MakenotCheckedbyIndex(int i)
+        {
+            storage[i].ColoredFalse();
+        }
         public void RemoveObject(int i)
         {
             figure[] storage2 = new figure[size - 1];
@@ -486,8 +680,6 @@ namespace WindowsFormsApp1
             }
             size = size - 1;
             storage = storage2;
-            //storage[0] = null;
-            //size = 0;
         }
         public void removeCheckedObject(MyStorage storage)
         {
@@ -531,4 +723,153 @@ namespace WindowsFormsApp1
         }
     }
 
+    class CGroup : figure
+    {
+        private int _count;
+        private int _maxcount;
+        public figure[] _shapes;
+        //private bool Checked;
+        private bool Colored;
+        //public MyStorage storage = new MyStorage();
+
+        public CGroup(int maxcount)
+        {
+            Colored = true;
+            _maxcount = maxcount; _count = 0;
+            _shapes = new figure[_maxcount];
+            for (int i = 0; i < _maxcount; ++i)
+            {
+                //_shapes = null;
+            }
+        }
+        ~CGroup()
+        {
+            for (int i = 0; i < _maxcount; ++i)
+            {
+                _shapes = null;
+            }
+            _shapes = null;
+        }
+
+        public bool addShape(figure obj)
+        {
+            if (_count >= _maxcount)
+                return false;
+
+            _count++;
+            _shapes[_count - 1] = obj;
+            return true;
+        }
+
+        public override void Move(KeyEventArgs e)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].Move(e);
+            }
+
+        }
+        public override void ColoredFalse()
+        {
+            Colored = false;
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].ColoredFalse();
+            }
+
+        }
+        public override void Draw(Panel panel1, Graphics g)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].Draw(panel1, g);
+            }
+        }
+
+        public override void Size(KeyEventArgs e)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].Size(e);
+            }
+        }
+
+        public override void ColoredTrue()
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].ColoredTrue();
+            }
+        }
+
+
+
+        public override bool isClicked(MouseEventArgs e)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                if (_shapes[i].isClicked(e) == true)
+                {
+                    Colored = true;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool IsChecked()
+        {
+            return Colored;
+        }
+
+        public override void chooseColor(int col)
+        {
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].chooseColor(col);
+            }
+        }
+
+        public override int getCount()
+        {
+            return _count;
+        }
+
+        public override figure getObject(int i)
+        {
+            return _shapes[i];
+        }
+
+        public override void Save(StreamWriter file)
+        {
+            file.WriteLine("G");
+            file.WriteLine(_count);
+            for (int i = 0; i < _count; i++)
+            {
+                _shapes[i].Save(file);
+            }
+        }
+
+        public override void Load(StreamReader file)
+        {
+            _maxcount = Convert.ToInt32(file.ReadLine());
+            _count = 0;
+            char name;
+            Factory factory = new Factory();
+            _shapes = new figure[_maxcount];
+            for (int i = 0; i < _maxcount; i++)
+            {
+                name = Convert.ToChar(file.ReadLine());
+                addShape(factory.createShape(name));
+                _shapes[i].Load(file);
+            }
+        }
+        public override string Name()
+        {
+            return "CGroup";
+        }
+
+
+
+    }
 }

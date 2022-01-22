@@ -15,6 +15,9 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
+            this.KeyPreview = true;
+            this.KeyDown += Form1_KeyDown;
+            Storage.observers += new System.EventHandler(this.UpdateFromStorage);
         }
         int figure = 0;
         int col = 0;
@@ -51,32 +54,36 @@ namespace WindowsFormsApp1
                     Storage.Highlighting(e);
                 }
             }
+            Storage.observers.Invoke(this, null);
             Refresh();
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            Graphics g = panel1.CreateGraphics();
-            if (e.KeyCode == Keys.Delete)
-            {
-                Storage.removeCheckedObject(Storage);
-                g.Clear(Color.White);
-            }
+        //private void Form1_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    Graphics g = panel1.CreateGraphics();
+        //    if (e.KeyCode == Keys.Delete)
+        //    {
+        //        Storage.removeCheckedObject(Storage);
+        //        g.Clear(Color.White);
+        //    }
 
-            if (e.KeyValue == 107 || e.KeyValue == 109)
-            {
-                Storage.Size(e);
-            }
-            if (e.KeyValue == 37 || e.KeyValue == 38 || e.KeyValue == 39 || e.KeyValue == 40)
-            {
-                Storage.Move(e);
-            }
-            if (e.KeyCode == Keys.F5)
-            {
-                Storage.chooseColor(col);
-            }
-            Refresh();
-        }
+        //    if (e.KeyValue == 107 || e.KeyValue == 109)
+        //    {
+        //        g.Clear(Color.White);
+        //        Storage.Size(e);
+        //    }
+        //    if (e.KeyValue == 37 || e.KeyValue == 38 || e.KeyValue == 39 || e.KeyValue == 40)
+        //    {
+        //        g.Clear(Color.White);
+        //        Storage.Move(e);
+        //    }
+        //    if (e.KeyCode == Keys.F5)
+        //    {
+        //        g.Clear(Color.White);
+        //        Storage.chooseColor(col);
+        //    }
+        //    Refresh();
+        //}
         private void black_Click(object sender, EventArgs e)
         {
             col = 1;
@@ -114,10 +121,126 @@ namespace WindowsFormsApp1
             figure = 3;
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            Graphics g = panel1.CreateGraphics();
+            if (e.KeyCode == Keys.Delete)
+            {
+                Storage.removeCheckedObject(Storage);
+                g.Clear(Color.White);
+            }
+
+            if (e.KeyValue == 107 || e.KeyValue == 109)
+            {
+                g.Clear(Color.White);
+                Storage.Size(e);
+            }
+            if (e.KeyCode == Keys.W || e.KeyCode == Keys.S || e.KeyCode == Keys.D || e.KeyCode == Keys.A)
+            {
+                g.Clear(Color.White);
+                Storage.Move(e);
+            }
+            if (e.KeyCode == Keys.F5)
+            {
+                g.Clear(Color.White);
+                Storage.chooseColor(col);
+            }
+            Refresh();
+        }
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = panel1.CreateGraphics();
             Storage.Draww(panel1, g);
+        }
+        private void UpdateFromStorage(object sender, EventArgs e)
+        {
+            treeView1.Nodes.Clear();
+
+            for (int i = 0; i < Storage.getCount(); i++)
+            {
+                TreeNode n = new TreeNode();
+                treeView1.Nodes.Add(MakeNode(Storage.getObject(i), n));
+            }
+            Refresh();
+        }
+        TreeNode MakeNode(figure fig, TreeNode n)
+        {
+            if (fig.IsChecked() == true)
+            {
+                n.Checked = true;
+            }
+            int count = 0;
+            if (fig is CGroup)
+            {
+                if (fig.IsChecked() == true)
+                {
+                    n.Checked = true;
+                }
+                n.Text = fig.Name();
+
+                for (int j = 0; j < fig.getCount(); j++)
+                {
+                    TreeNode nn = new TreeNode();
+                    count = n.Nodes.Add(MakeNode(fig.getObject(j), nn));
+                }
+                count++;
+            }
+            else
+            {
+                n.Text = fig.Name();
+            }
+            return n;
+        }
+
+        private void btn_groop_Click(object sender, EventArgs e)
+        {
+            Storage.createGroup();
+            Storage.observers.Invoke(this, null);
+        }
+
+        private void btn_ungroop_Click(object sender, EventArgs e)
+        {
+            Storage.deleteGroup();
+            Storage.observers.Invoke(this, null);
+        }
+
+        private void btn_save_Click(object sender, EventArgs e)
+        {
+            Storage.saveAll();
+        }
+
+        private void btn_load_Click(object sender, EventArgs e)
+        {
+            Storage.loadAll();
+            Storage.observers.Invoke(this, null);
+            Refresh();
+        }
+
+
+
+
+
+      
+
+        private void btn_sticky_Click(object sender, EventArgs e)
+        {
+            Storage.MakeSticky();
+        }
+
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            foreach (TreeNode n in treeView1.Nodes)
+            {
+                if (n.Checked)
+                {
+                    Storage.MakeCheckedbyIndex(n.Index);
+                }
+                else
+                {
+                    Storage.MakenotCheckedbyIndex(n.Index);
+                }
+            }
+            Refresh();
         }
     }
 
