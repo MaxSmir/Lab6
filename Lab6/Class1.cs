@@ -46,6 +46,10 @@ namespace WindowsFormsApp1
         {
             return true;
         }
+        virtual public bool isShapeSticky()
+        {
+            return Sticky;
+        }
         virtual public void Save(StreamWriter file)
         {
         }
@@ -189,6 +193,7 @@ namespace WindowsFormsApp1
             file.WriteLine(x);
             file.WriteLine(y);
             file.WriteLine(r);
+            file.WriteLine(Sticky);
             file.WriteLine(color.ToKnownColor());
         }
         public override void Load(StreamReader file)
@@ -196,6 +201,7 @@ namespace WindowsFormsApp1
             x = Convert.ToInt32(file.ReadLine());
             y = Convert.ToInt32(file.ReadLine());
             r = Convert.ToInt32(file.ReadLine());
+            Sticky = Convert.ToBoolean(file.ReadLine());
             color = Color.FromName(file.ReadLine());
         }
         public override string Name()
@@ -294,6 +300,7 @@ namespace WindowsFormsApp1
             file.WriteLine(x);
             file.WriteLine(y);
             file.WriteLine(r);
+            file.WriteLine(Sticky);
             file.WriteLine(color.ToKnownColor());
         }
 
@@ -302,6 +309,7 @@ namespace WindowsFormsApp1
             x = Convert.ToInt32(file.ReadLine());
             y = Convert.ToInt32(file.ReadLine());
             r = Convert.ToInt32(file.ReadLine());
+            Sticky = Convert.ToBoolean(file.ReadLine());
             color = Color.FromName(file.ReadLine());
         }
         public override string Name()
@@ -336,23 +344,20 @@ namespace WindowsFormsApp1
 
     class triangle : figure
     {
-        private int x;
-        private int y;
-        private int a;
         private Point[] points;
         private bool Colored;
         private Pen pen;
         private SolidBrush brush;
-        public triangle(int x, int y, int a)
+        public triangle(int x, int y, int r)
         {
             this.x = x;
             this.y = y;
-            this.a = a;
+            this.r = r;
             brush = new SolidBrush(Color.White);
             points = new Point[3];
-            points[0].X = x; points[0].Y = y - a;
-            points[1].X = x - a; points[1].Y = y + a;
-            points[2].X = x + a; points[2].Y = y + a;
+            points[0].X = x; points[0].Y = y - r;
+            points[1].X = x - r; points[1].Y = y + r;
+            points[2].X = x + r; points[2].Y = y + r;
         }
 
         override public void Draw(Panel panel1, Graphics g)
@@ -385,25 +390,25 @@ namespace WindowsFormsApp1
         }
         override public void Move(KeyEventArgs e)
         {
-            if (e.KeyValue == 37)
+            if (e.KeyCode == Keys.A)
             {
                 points[0].X = points[0].X - 5; points[0].Y = points[0].Y;
                 points[1].X = points[1].X - 5; points[1].Y = points[1].Y;
                 points[2].X = points[2].X - 5; points[2].Y = points[2].Y;
             }
-            if (e.KeyValue == 39)
+            if (e.KeyCode == Keys.D)
             {
                 points[0].X = points[0].X + 5; points[0].Y = points[0].Y;
                 points[1].X = points[1].X + 5; points[1].Y = points[1].Y;
                 points[2].X = points[2].X + 5; points[2].Y = points[2].Y;
             }
-            if (e.KeyValue == 38)
+            if (e.KeyCode == Keys.W)
             {
                 points[0].X = points[0].X; points[0].Y = points[0].Y - 5;
                 points[1].X = points[1].X; points[1].Y = points[1].Y - 5;
                 points[2].X = points[2].X; points[2].Y = points[2].Y - 5;
             }
-            if (e.KeyValue == 40)
+            if (e.KeyCode == Keys.S)
             {
                 points[0].X = points[0].X; points[0].Y = points[0].Y + 5;
                 points[1].X = points[1].X; points[1].Y = points[1].Y + 5;
@@ -415,19 +420,50 @@ namespace WindowsFormsApp1
             if (col == 1)
             {
                 brush.Color = Color.Black;
+                color = Color.Black;
             }
             if (col == 2)
             {
                 brush.Color = Color.Red;
+                color = Color.Red;
             }
             if (col == 3)
             {
                 brush.Color = Color.Blue;
+                color = Color.Blue;
             }
             if (col == 4)
             {
                 brush.Color = Color.Green;
+                color = Color.Green;
             }
+        }
+        public override void Save(StreamWriter file)
+        {
+            file.WriteLine("T");
+            file.WriteLine(x);
+            file.WriteLine(y);
+            file.WriteLine(r);
+            file.WriteLine(Sticky);
+            file.WriteLine(color.ToKnownColor());
+        }
+
+        public override void Load(StreamReader file)
+        {
+            x = Convert.ToInt32(file.ReadLine());
+            y = Convert.ToInt32(file.ReadLine());
+            r = Convert.ToInt32(file.ReadLine());
+            Sticky = Convert.ToBoolean(file.ReadLine());
+            color = Color.FromName(file.ReadLine());
+        }
+        public override string Name()
+        {
+            return "triangle";
+        }
+
+        override public bool isSticky()
+        {
+            return Sticky;
         }
         public override bool IsChecked()
         {
@@ -435,7 +471,7 @@ namespace WindowsFormsApp1
         }
         public override bool isClicked(MouseEventArgs e)
         {
-            if (e.X >= x - a && e.Y >= y - a && e.X <= x + a && e.Y <= y + a)
+            if (e.X >= x - r && e.Y >= y - r && e.X <= x + r && e.Y <= y + r)
             {
                 return true;
             }
@@ -452,6 +488,7 @@ namespace WindowsFormsApp1
         {
             Colored = true;
         }
+
     }
     class Factory
     {
@@ -466,9 +503,13 @@ namespace WindowsFormsApp1
                 case 'S':
                     obj = new sqare(0, 0, 0);
                     break;
+                case 'T':
+                    obj = new triangle(0, 0, 0);
+                    break;
                 case 'G':
                     obj = new CGroup(0);
                     break;
+
                 default:
                     break;
             }

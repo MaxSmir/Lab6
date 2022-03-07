@@ -208,20 +208,12 @@ namespace WindowsFormsApp1
         {
             Storage.saveAll();
         }
-
         private void btn_load_Click(object sender, EventArgs e)
         {
             Storage.loadAll();
             Storage.observers.Invoke(this, null);
             Refresh();
-        }
-
-
-
-
-
-      
-
+        }      
         private void btn_sticky_Click(object sender, EventArgs e)
         {
             Storage.MakeSticky();
